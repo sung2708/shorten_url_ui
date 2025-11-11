@@ -1,5 +1,5 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React, { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import { assets } from "../assets/assets.js";
 
 const Navbar = () => {
@@ -9,11 +9,13 @@ const Navbar = () => {
     { name: "About", path: "/about" },
   ];
 
-  const ref = React.useRef(null);
+  const [isScrolled, setIsScrolled] = useState(false);
 
-  const [isScrolled, setIsScrolled] = React.useState(false);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
 
-  const [isMenuOpen, setIsMenuOpen] = React.useState(false);
+  const [isLogined, setIsLogined] = useState(false);
+
+  const navigate = useNavigate();
 
   React.useEffect(() => {
     const handleScroll = () => {
@@ -27,14 +29,14 @@ const Navbar = () => {
 
   return (
     <nav
-      className={`fixed top-0 left-0 w-full bg-amber-600 flex items-center justify-between px-4 md:px-16 lg:px-24 xl:px-32 transition-all duration-500 z-50 ${isScrolled ? "bg-white/80 shadow-md text-gray-700 backdrop-blur-lg py-3 md:py-4" : "py-4 md:py-6"}`}
+      className={`fixed top-0 left-0 w-full flex items-center justify-between px-4 md:px-16 lg:px-24 xl:px-32 transition-all duration-500 z-50 ${isScrolled ? "bg-white/80 shadow-md text-gray-700 backdrop-blur-lg py-3 md:py-4" : "py-4 md:py-6"}`}
     >
       {/* Logo */}
 
       <Link to={"/"}>
         <img
           src={assets.logo}
-          className={`h-12 ${isScrolled && "invert opacity-80"}`}
+          className={`h-9 ${isScrolled && "invert opacity-80"}`}
         />
       </Link>
       {/* Desktop Nav */}
@@ -53,18 +55,20 @@ const Navbar = () => {
             />
           </a>
         ))}
-
-        <button
-          className={`border px-4 py-1 text-sm font-light rounded-full cursor-pointer ${isScrolled ? "text-black" : "text-white"} transition-all`}
-        >
-          DashBoard
-        </button>
+        {isLogined && (
+          <button
+            className={`border px-4 py-1 text-sm font-light rounded-full cursor-pointer ${isScrolled ? "text-black" : "text-white"} transition-all`}
+          >
+            DashBoard
+          </button>
+        )}
       </div>
 
       {/* Desktop Right */}
 
       <div className="hidden md:flex items-center gap-4">
         <button
+          onClick={() => navigate("/auth?mode=signin")}
           className={`px-8 py-2.5 rounded-full ml-4 transition-all duration-500 ${isScrolled ? "text-white bg-black" : "bg-white text-black"}`}
         >
           Login
@@ -99,12 +103,15 @@ const Navbar = () => {
             {link.name}
           </a>
         ))}
-
-        <button className="border px-4 py-1 text-sm font-light rounded-full cursor-pointer transition-all">
-          DashBoard
-        </button>
-
-        <button className="bg-black text-white px-8 py-2.5 rounded-full transition-all duration-500">
+        {isLogined && (
+          <button className="border px-4 py-1 text-sm font-light rounded-full cursor-pointer transition-all">
+            DashBoard
+          </button>
+        )}
+        <button
+          onClick={() => navigate("/auth?mode=login")}
+          className="bg-black text-white px-8 py-2.5 rounded-full transition-all duration-500"
+        >
           Login
         </button>
       </div>
