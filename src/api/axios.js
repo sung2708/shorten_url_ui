@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const api = axios.create({
-  baseURL: "http://tinyr.site/api/v1",
+  baseURL: "https://tinyr.site/api/v1",
 });
 
 api.interceptors.request.use((config) => {
