@@ -5,15 +5,26 @@ import SigninForm from "../components/Auth/SigninForm";
 
 const AuthPage = () => {
   const [searchParams, setSearchParams] = useSearchParams();
-  const currentMode = searchParams.get("mode") || "signin";
+  const currentMode = searchParams.get("mode");
 
-  // Xác định chế độ hiện tại
-  const isSigninMode = currentMode === "signin";
+  const isSigninMode =
+    currentMode === "signin" ||
+    !currentMode ||
+    (currentMode !== "signup" && currentMode !== "signin");
+  const modeToDisplay = isSigninMode ? "signin" : "signup";
 
-  // Hàm đổi chế độ
   const handleChangeMode = (mode) => {
     setSearchParams({ mode });
   };
+
+  useEffect(() => {
+    if (
+      !currentMode ||
+      (currentMode !== "signin" && currentMode !== "signup")
+    ) {
+      setSearchParams({ mode: "signin" }, { replace: true });
+    }
+  }, [currentMode, setSearchParams]);
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gray-50">
@@ -29,7 +40,7 @@ const AuthPage = () => {
           <>
             <h2 className="text-4xl text-gray-900 font-medium">Sign up</h2>
             <p className="text-sm text-gray-500/90 mt-3">
-              Hello! Please <i>sign up</i> to continue.
+              Hello! Please sign up to continue.
             </p>
           </>
         )}

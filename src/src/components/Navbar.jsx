@@ -1,6 +1,8 @@
-import React, { useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { assets } from "../assets/assets.js";
+import Avatar from "./AvatarMenu";
+import { AuthContext } from "../../context/AuthContext";
 
 const Navbar = () => {
   const navLinks = [
@@ -9,11 +11,10 @@ const Navbar = () => {
     { name: "About", path: "/about" },
   ];
 
+  const { isLogined, logout } = useContext(AuthContext);
   const [isScrolled, setIsScrolled] = useState(false);
 
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-
-  const [isLogined, setIsLogined] = useState(false);
 
   const navigate = useNavigate();
 
@@ -66,18 +67,25 @@ const Navbar = () => {
 
       {/* Desktop Right */}
 
-      <div className="hidden md:flex items-center gap-4">
-        <button
-          onClick={() => navigate("/auth?mode=signin")}
-          className={`px-8 py-2.5 rounded-full ml-4 transition-all duration-500 ${isScrolled ? "text-white bg-black" : "bg-white text-black"}`}
-        >
-          Login
-        </button>
+      <div className="md:flex items-center gap-4 hidden">
+        {isLogined ? (
+          <Avatar />
+        ) : (
+          <button
+            onClick={() => navigate("/auth?mode=signin")}
+            className={`px-8 py-2.5 rounded-full transition-all duration-500 ${
+              isScrolled ? "text-white bg-black" : "bg-white text-black"
+            }`}
+          >
+            Login
+          </button>
+        )}
       </div>
-
       {/* Mobile Menu Button */}
 
       <div className="flex items-center gap-3 md:hidden">
+        {isLogined && <Avatar />}
+
         <img
           onClick={() => setIsMenuOpen(!isMenuOpen)}
           src={assets.menuIcon}
@@ -108,12 +116,14 @@ const Navbar = () => {
             DashBoard
           </button>
         )}
-        <button
-          onClick={() => navigate("/auth?mode=login")}
-          className="bg-black text-white px-8 py-2.5 rounded-full transition-all duration-500"
-        >
-          Login
-        </button>
+        {!isLogined && (
+          <button
+            onClick={() => navigate("/auth?mode=login")}
+            className="bg-black text-white px-8 py-2.5 rounded-full transition-all duration-500"
+          >
+            Login
+          </button>
+        )}
       </div>
     </nav>
   );

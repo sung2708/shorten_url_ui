@@ -9,7 +9,7 @@ const Home = () => {
   return (
     <div>
       {!isDashboardPath && <Navbar />}
-      <Hero />;
+      <Hero />
     </div>
   );
 };
