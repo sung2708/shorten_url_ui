@@ -7,7 +7,7 @@ export default defineConfig({
     plugins: [react(), tailwindcss()],
     server: {
         proxy: {
-            "/api": {
+            "/api/v1": {
                 target: "https://tinyr.site",
                 changeOrigin: true,
                 secure: true,
