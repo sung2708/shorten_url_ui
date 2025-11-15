@@ -8,7 +8,7 @@ export default defineConfig({
     server: {
         proxy: {
             "/api": {
-                target: "https://api.tinyr.site",
+                target: "https://tinyr.site",
                 changeOrigin: true,
                 secure: true,
             },
